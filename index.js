@@ -18,7 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', (req, res) => {
     res.render('index');
-});
+}); // Home Page
 
 function parseJsonFromMarkdown(markdownContent) {
     const jsonStringMatch = markdownContent.match(/```json\s([\s\S]+?)```/);
