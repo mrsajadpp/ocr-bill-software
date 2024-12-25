@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
+const xlsx = require('xlsx');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
@@ -23,6 +24,12 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const imagePath = req.file.path;
     const imageResp = fs.readFileSync(imagePath);
 
+    // Read the Excel file
+    const workbook = xlsx.readFile(path.join(__dirname, 'Component_Prices_Demo_INR.xlsx'));
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const componentsData = xlsx.utils.sheet_to_json(sheet);
+
     const result = await model.generateContent([
         {
             inlineData: {
@@ -30,13 +37,21 @@ app.post('/upload', upload.single('image'), async (req, res) => {
                 mimeType: req.file.mimetype,
             },
         },
-        'Extract the text in this image.',
+        {
+            inlineData: {
+                data: Buffer.from(JSON.stringify(componentsData)).toString("base64"),
+                mimeType: 'text/plain',
+            },
+        },
+        'Extract the components, quantities, and prices from the image and Excel file, and calculate the total cost.',
     ]);
 
-    const extractedText = result.response.text();
-    fs.unlinkSync(imagePath); // Clean up the uploaded file
-
-    res.render('result', { text: extractedText });
+    try {
+        res.render('result', { text: result.response.text() });
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 app.listen(port, () => {
