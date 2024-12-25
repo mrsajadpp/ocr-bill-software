@@ -135,7 +135,6 @@
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
             
-            // Create a clone of the container without the ignorePDF element
             const container = document.querySelector('.container');
             const clone = container.cloneNode(true);
             const ignoreElement = clone.querySelector('#ignorePDF');
@@ -143,26 +142,22 @@
                 ignoreElement.remove();
             }
             
-            // Temporarily add the clone to the document for html2canvas
             clone.style.position = 'absolute';
             clone.style.left = '-9999px';
             document.body.appendChild(clone);
             
-            // Create configuration for html2canvas
             const options = {
-                scale: 2, // Increase quality
-                useCORS: true, // Enable loading of external images
+                scale: 2, 
+                useCORS: true, 
                 logging: false,
                 removeContainer: true,
                 backgroundColor: '#ffffff'
             };
 
-            // Convert the element to canvas and create PDF
             html2canvas(clone, options).then(canvas => {
-                // Remove the clone after capturing
                 document.body.removeChild(clone);
-                const imgWidth = 210; // A4 width in mm
-                const pageHeight = 297; // A4 height in mm
+                const imgWidth = 210; 
+                const pageHeight = 297; 
                 const imgHeight = canvas.height * imgWidth / canvas.width;
                 const doc = new jsPDF('p', 'mm');
                 
@@ -173,7 +168,6 @@
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
 
-                // Add new pages if content exceeds one page
                 while (heightLeft >= 0) {
                     position = heightLeft - imgHeight;
                     doc.addPage();
