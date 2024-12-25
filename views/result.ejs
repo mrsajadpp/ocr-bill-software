@@ -1,26 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OCR Result</title>
 </head>
+
 <body>
     <h1>Extracted Text</h1>
-    <p><%= result.text %></p>
+    <p>
+        <%= result.text %>
+    </p>
     <h2>Items</h2>
     <ul>
         <% result.items.forEach(function(item) { %>
             <li>
-                <strong>Name:</strong> <%= item.name %><br>
-                <strong>Unit Price:</strong> <%= item.unit_price %> <%= result.currency %><br>
-                <strong>Quantity:</strong> <%= item.quantity %><br>
-                <strong>Total Price:</strong> <%= item.total_price %> <%= result.currency %>
+                <strong>Name:</strong>
+                <%= item.name %><br>
+                    <strong>Unit Price:</strong>
+                    <%= item.unit_price %>
+                        <%= result.currency %><br>
+                            <strong>Quantity:</strong>
+                            <%= item.quantity %><br>
+                                <strong>Total Price:</strong>
+                                <%= item.total_price %>
+                                    <%= result.currency %>
             </li>
-        <% }); %>
+            <% }); %>
     </ul>
     <h2>Total</h2>
-    <p><%= result.total %> <%= result.currency %></p>
+    <p>
+        <%= result.total %>
+            <%= result.currency %>
+    </p>
     <a href="/">Upload another image</a>
+    <button id="download-pdf">Download PDF</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        document.getElementById('download-pdf').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let y = 10; // Initial Y position
+
+            doc.text('Extracted Text', 10, y);
+            y += 10;
+            doc.text('<%= result.text %>', 10, y);
+            y += 10;
+
+            doc.text('Items', 10, y);
+            y += 10;
+            <% result.items.forEach(function (item, index) { %>
+                doc.text('Name: <%= item.name %>', 10, y);
+                y += 10;
+                doc.text('Unit Price: <%= item.unit_price %> <%= result.currency %>', 10, y);
+                y += 10;
+                doc.text('Quantity: <%= item.quantity %>', 10, y);
+                y += 10;
+                doc.text('Total Price: <%= item.total_price %> <%= result.currency %>', 10, y);
+                y += 10;
+            <% }); %>
+
+                doc.text('Total: <%= result.total %> <%= result.currency %>', 10, y + 10);
+
+            doc.save('invoice.pdf');
+        });
+    </script>
 </body>
+
 </html>
