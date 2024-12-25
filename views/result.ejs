@@ -7,15 +7,20 @@
 </head>
 <body>
     <h1>Extracted Text</h1>
-    <div id="content"></div>
-    <md><%= text %></md>
+    <p><%= result.text %></p>
+    <h2>Items</h2>
+    <ul>
+        <% result.items.forEach(function(item) { %>
+            <li>
+                <strong>Name:</strong> <%= item.name %><br>
+                <strong>Unit Price:</strong> <%= item.unit_price %> <%= result.currency %><br>
+                <strong>Quantity:</strong> <%= item.quantity %><br>
+                <strong>Total Price:</strong> <%= item.total_price %> <%= result.currency %>
+            </li>
+        <% }); %>
+    </ul>
+    <h2>Total</h2>
+    <p><%= result.total %> <%= result.currency %></p>
     <a href="/">Upload another image</a>
-    <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Markdown-Tag/markdown-tag.js"></script> 
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const markdownContent = `<%= text %>`;
-            document.getElementById('content').innerHTML = marked(markdownContent);
-        });
-    </script> -->
 </body>
 </html>

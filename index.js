@@ -20,6 +20,24 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+function parseJsonFromMarkdown(markdownContent) {
+    const jsonStringMatch = markdownContent.match(/```json\s([\s\S]+?)```/);
+
+    if (jsonStringMatch) {
+      const jsonString = jsonStringMatch[1]; 
+      try {
+        const jsonObject = JSON.parse(jsonString); 
+        return jsonObject; 
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+        return null;
+      }
+    } else {
+      console.log('No JSON found in the markdown content');
+      return null;
+    }
+  }
+
 app.post('/upload', upload.single('image'), async (req, res) => {
     const imagePath = req.file.path;
     const imageResp = fs.readFileSync(imagePath);
@@ -54,7 +72,9 @@ app.post('/upload', upload.single('image'), async (req, res) => {
             }
         });
 
-        res.render('result', { text: result.response.text() });
+        let responseJson = parseJsonFromMarkdown(result.response.text());
+
+        res.render('result', { result: responseJson });
     } catch (error) {
         console.error('Error parsing JSON:', error);
         res.status(500).send('Internal Server Error');
