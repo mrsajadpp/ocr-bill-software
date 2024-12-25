@@ -9,7 +9,7 @@
     "nodemon": "^3.1.9",
     "path": "^0.12.7"
   },
-  "name": "ocr",
+  "name": "ocr-bill-software",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
