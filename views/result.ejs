@@ -115,6 +115,14 @@
                         <td><%= item.total_price %> <%= result.currency %></td>
                     </tr>
                 <% }); %>
+
+                <% result.unavailable_items.forEach(function(item) { %>
+                    <tr>
+                        <td><%= item.name %></td>
+                        <td><%= item.quantity %></td>
+                        <td class="unavailable-cell" colspan="2" rowspan="1">Unavailable</td>
+                    </tr>
+                <% }); %>
             </tbody>
             <tfoot>
                 <tr>

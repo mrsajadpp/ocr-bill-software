@@ -61,7 +61,27 @@ app.post('/upload', upload.single('image'), async (req, res) => {
                     mimeType: 'text/plain',
                 },
             },
-            `Extract the components and their quantities from the uploaded image and match them with the prices listed in the provided Excel file. For each component, calculate the total price by multiplying the unit price by the quantity and return the result in the following JSON format: { 'currency': 'INR', 'items': [ { 'name': 'Component Name', 'unit_price': 'Price per unit in INR', 'quantity': 'Quantity requested', 'total_price': 'Calculated total price for that component' } ], 'total': 'Total calculated price for all components' } If a component or its price is not found in the Excel data, respond with 'Component not found in the database.' If the handwriting in the image is unclear or text cannot be extracted, respond with 'I can't understand your handwriting.' Do not include any additional responses, such as chatting, questions, or irrelevant information.`,
+            `Extract the components and their quantities from the uploaded image and match them with the prices listed in the provided Excel file. For each component, calculate the total price by multiplying the unit price by the quantity. Return the result in the following JSON format:
+
+{
+  "currency": "INR",
+  "items": [
+    {
+      "name": "Component Name",
+      "unit_price": "Price per unit in INR",
+      "quantity": "Quantity requested",
+      "total_price": "Calculated total price for that component"
+    }
+  ],
+  "unavailable_items": [
+    {
+      "name": "Component Name",
+      "quantity": "Quantity requested"
+    }
+  ],
+  "total": "Total calculated price for all components"
+}
+If any items are not found in the Excel file, insert the item name into the unavailable_items array. If the handwriting in the image is unclear or if text cannot be extracted, respond with 'I can't understand your handwriting.' Avoid adding extra responses, such as chatting, questions, or irrelevant information.`,
         ]);
 
         fs.unlink(imagePath, (err) => {
