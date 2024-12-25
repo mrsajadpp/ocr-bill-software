@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,10 +23,8 @@
         }
 
         .container {
-            background-color: white;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             text-align: center;
@@ -48,24 +46,23 @@
         }
 
         button {
-            background-color: #0078e8;
+            background-color: #000;
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 16px;
+            padding: 10px 10px;
+            font-size: 13px;
             cursor: pointer;
             border-radius: 4px;
             transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #000;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Upload an Image for OCR</h1>
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image" accept="image/*" required>
             <button type="submit">Upload</button>
