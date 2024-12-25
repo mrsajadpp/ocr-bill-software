@@ -4,69 +4,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR Result</title>
+    <title>Bill Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .header {
+            padding: 20px 0;
+        }
+
+        .logo {
+            width: 160px;
+            /* Adjust this to fit your logo size */
+        }
+
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .bill-table th,
+        .bill-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .bill-table th {
+            background-color: #f4f4f4;
+        }
+
+        .bill-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .bill-table tfoot td {
+            font-weight: bold;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        /* Styling for the link */
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #0078e8;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        /* Styling for the button */
+        button {
+            background-color: #0078e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Extracted Text</h1>
-    <p>
-        <%= result.text %>
-    </p>
-    <h2>Items</h2>
-    <ul>
-        <% result.items.forEach(function(item) { %>
-            <li>
-                <strong>Name:</strong>
-                <%= item.name %><br>
-                    <strong>Unit Price:</strong>
-                    <%= item.unit_price %>
-                        <%= result.currency %><br>
-                            <strong>Quantity:</strong>
-                            <%= item.quantity %><br>
-                                <strong>Total Price:</strong>
-                                <%= item.total_price %>
-                                    <%= result.currency %>
-            </li>
-            <% }); %>
-    </ul>
-    <h2>Total</h2>
-    <p>
-        <%= result.total %>
-            <%= result.currency %>
-    </p>
-    <a href="/">Upload another image</a>
-    <button id="download-pdf">Download PDF</button>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script>
-        document.getElementById('download-pdf').addEventListener('click', function () {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            let y = 10; // Initial Y position
-
-            doc.text('Extracted Text', 10, y);
-            y += 10;
-            doc.text('<%= result.text %>', 10, y);
-            y += 10;
-
-            doc.text('Items', 10, y);
-            y += 10;
-            <% result.items.forEach(function (item, index) { %>
-                doc.text('Name: <%= item.name %>', 10, y);
-                y += 10;
-                doc.text('Unit Price: <%= item.unit_price %> <%= result.currency %>', 10, y);
-                y += 10;
-                doc.text('Quantity: <%= item.quantity %>', 10, y);
-                y += 10;
-                doc.text('Total Price: <%= item.total_price %> <%= result.currency %>', 10, y);
-                y += 10;
-            <% }); %>
-
-                doc.text('Total: <%= result.total %> <%= result.currency %>', 10, y + 10);
-
-            doc.save('invoice.pdf');
-        });
-    </script>
+    <div class="container">
+        <div class="header">
+            <img src="https://i.postimg.cc/NMBT7K0n/tikketu.png" alt="Logo" class="logo">
+        </div>
+        <table class="bill-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% result.items.forEach(function(item) { %>
+                    <tr>
+                        <td>
+                            <%= item.name %>
+                        </td>
+                        <td>
+                            <%= item.quantity %>
+                        </td>
+                        <td>
+                            <%= item.unit_price %>
+                                <%= result.currency %>
+                        </td>
+                        <td>
+                            <%= item.total_price %>
+                                <%= result.currency %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td>
+                        <%= result.total %>
+                            <%= result.currency %>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <a href="/">Upload another image</a>
+        <button id="download-pdf">Download PDF</button>
+    </div>
 </body>
 
 </html>
