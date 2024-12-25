@@ -36,7 +36,7 @@ function parseJsonFromMarkdown(markdownContent) {
         console.log('No JSON found in the markdown content');
         return null;
     }
-}
+}; // Parse Json From Markdown
 
 app.post('/upload', upload.single('image'), async (req, res) => {
     const imagePath = req.file.path;
@@ -79,8 +79,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         console.error('Error parsing JSON:', error);
         res.status(500).send('Internal Server Error');
     }
-});
+}); // Upload Image and Generate Content
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
-});
+}); // Listen to Port
