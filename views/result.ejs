@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR Bill</title>
+    <title>Bill Example</title>
     <style>
         body {
             font-family: sans-serif;
@@ -13,9 +13,10 @@
         }
 
         .container {
-            width: 80%;
+            width: 768px;
             margin: 20px auto;
             padding: 15px;
+            box-sizing: border-box;
         }
 
         .header {
@@ -135,6 +136,7 @@
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
             
+            // Create a clone of the container without the ignorePDF element
             const container = document.querySelector('.container');
             const clone = container.cloneNode(true);
             const ignoreElement = clone.querySelector('#ignorePDF');
@@ -142,21 +144,34 @@
                 ignoreElement.remove();
             }
             
+            // Temporarily add the clone to the document for html2canvas
+            clone.style.width = '768px';
             clone.style.position = 'absolute';
             clone.style.left = '-9999px';
             document.body.appendChild(clone);
             
+            // Force the clone to have exact dimensions
+            clone.style.boxSizing = 'border-box';
+            clone.style.padding = '15px';
+            clone.style.margin = '20px auto';
+            
+            // Create configuration for html2canvas
             const options = {
-                scale: 2, 
-                useCORS: true, 
+                scale: 2, // Increase quality
+                useCORS: true, // Enable loading of external images
                 logging: false,
                 removeContainer: true,
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
+                width: 768, // Fixed width
+                windowWidth: 768,
+                height: clone.offsetHeight
             };
 
             html2canvas(clone, options).then(canvas => {
                 document.body.removeChild(clone);
-                const imgWidth = 210; 
+                const pdfWidth = 210; 
+                const pixelsPerMm = 768 / pdfWidth;
+                const imgWidth = pdfWidth;
                 const pageHeight = 297; 
                 const imgHeight = canvas.height * imgWidth / canvas.width;
                 const doc = new jsPDF('p', 'mm');
