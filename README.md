@@ -15,7 +15,7 @@ A software for generating OCR-based bills by extracting components and their qua
 1. Clone the repository:
     ```sh
     git clone https://github.com/mrsajadpp/ocr-bill-software.git
-    cd ocr
+    cd ocr-bill-software
     ```
 
 2. Install dependencies:
@@ -63,4 +63,4 @@ A software for generating OCR-based bills by extracting components and their qua
 
 ## License
 
-This project is licensed under the ISC License.
+This project is licensed under the Apache-2.0 License.
